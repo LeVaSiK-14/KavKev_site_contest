@@ -1,6 +1,6 @@
-# from django.db import models
-# from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-# class User(AbstractUser):
+class User(AbstractUser):
 
-#     qt_quantity = models.PositiveIntegerField(default=0)
+    qt_quantity = models.PositiveIntegerField(default=0)
