@@ -33,5 +33,24 @@ class RetrieveUpdateToken(RetrieveUpdateAPIView):
             token.user = user
             token.isActive = False
             token.save()
-            serializer = TokenSerializer(instance=token)
-            return Response(serializer.data)
+            user.qr_quantity += 1
+            user.save()
+            if user.qr_quantity >= 5:
+                user.which_contest = "MORE_5_LESS_10"
+                user.save()
+                return Response({"Success": f"Поздравляем вы учавствуете в маленьком конкурсе! {user.qr_quantity}"})
+            elif user.qr_quantity >= 10:
+                user.which_contest = "MORE_10_LESS_100"
+                user.save()
+                return Response({"Success": f"Поздравляем вы учавствуете в среднем конкурсе! {user.qr_quantity}"})
+            elif user.qr_quantity >= 100:
+                user.which_contest = "MORE_100"
+                user.save()
+                return Response({"Success": f"Поздравляем вы учавствуете в самом большом конкурсе! {user.qr_quantity}"})
+            else:
+                user.which_contest = "LESS_5"
+                user.save()
+                return Response({"Success": f"Отсканируйте больше 5 Qr кодов, что бы начать учавствовать в конкурсе! {user.qr_quantity}"})
+            
+    # serializer = TokenSerializer(instance=token)
+    # return Response(serializer.data)
