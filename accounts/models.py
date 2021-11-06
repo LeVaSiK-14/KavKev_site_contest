@@ -10,3 +10,4 @@ class User(AbstractUser):
 
     qr_quantity = models.PositiveIntegerField(default=0)
     which_contest = models.CharField(max_length=50, choices=ContestUser.choices, default=ContestUser.LESS_5)
+    
