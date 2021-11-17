@@ -1,8 +1,9 @@
-from rest_framework.serializers import ModelSerializer, HyperlinkedModelSerializer
+from rest_framework.serializers import ModelSerializer, ReadOnlyField
 from mainapp.models import Token
 from accounts.models import Contest
 
 class TokenSerializer(ModelSerializer):
+    user = ReadOnlyField(source='user.username')
     class Meta:
         model = Token
         fields = ['id', 'token', 'slug', 'isActive', 'user']
