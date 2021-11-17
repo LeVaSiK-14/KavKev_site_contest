@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 import environ
 
+# Настройка и подключеник .env
 env = environ.Env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -12,7 +13,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = env('DEBUG')
 
-
+# Разрешенные хосты
 ALLOWED_HOSTS = ['*']
 
 
@@ -25,22 +26,27 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    # Подключенные библиотеки-приложения
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
     'drf_yasg',
     'django_filters',
     'corsheaders',
-
+    'django_celery_beat',
+    'django_celery_results',
+    # Мои приложения
     'mainapp',
     'accounts',
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # Подключение cors middleware
     "corsheaders.middleware.CorsMiddleware",
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -50,6 +56,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'kavKev_Site.urls'
 
+# Настройка Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -69,6 +76,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'kavKev_Site.wsgi.application'
 
 
+# Подключение базы данных Postgresql
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -87,6 +95,7 @@ DATABASES = {
     }
 }
 
+# Валидация паролей пользователей при регистрации
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -102,29 +111,42 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+# Настройка Time zone и языка проекта
 LANGUAGE_CODE = 'ru'
-
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'Asia/Almaty'
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
-
+# Настройка Static файлов
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR / 'static')
 
+
+# Настройка CORS headers
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
     'http://127.0.0.1:5500',
+    
 
 ]
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Настройка Celery
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_BROKER_TRANSPORT = 'redis'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = "Asia/Almaty"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_RESULT_BACKEND = 'django-db'
 
+
+
+
+
+# Настройка авторизации через REST
 AUTH_USER_MODEL = 'accounts.User'
 
 REST_FRAMEWORK = {
@@ -132,3 +154,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
+
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

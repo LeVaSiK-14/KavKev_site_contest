@@ -27,7 +27,7 @@ for n in range(0, 100):
             "token": token,
             "slug": token
             }
-    siteURL = 'http://localhost:8888/api/token/'
+    siteURL = 'http://0.0.0.0:8000/api/token/'
     response = requests.post(siteURL, data)
 
 

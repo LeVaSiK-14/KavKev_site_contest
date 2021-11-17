@@ -1,3 +1,4 @@
+from django.db.models.base import Model
 from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
@@ -7,7 +8,9 @@ from django_filters import rest_framework as django_filter
 from rest_framework.response import Response
 
 from mainapp.models import Token
-from mainapp.serializers import TokenSerializer
+from mainapp.serializers import TokenSerializer, ContestSerializer
+from accounts.models import Contest
+
 
 class ListCreateToken(ListCreateAPIView):
     queryset = Token.objects.all()
@@ -30,27 +33,28 @@ class RetrieveUpdateToken(RetrieveUpdateAPIView):
         if token.isActive == False:
             return Response({'Error': 'Данный QR код был отсканирован ранее'})
         else:
-            token.user = user
-            token.isActive = False
-            token.save()
-            user.qr_quantity += 1
-            user.save()
-            if user.qr_quantity >= 5:
-                user.which_contest = "MORE_5_LESS_10"
-                user.save()
-                return Response({"Success": f"Поздравляем вы учавствуете в маленьком конкурсе! {user.qr_quantity}"})
-            elif user.qr_quantity >= 10:
-                user.which_contest = "MORE_10_LESS_100"
-                user.save()
-                return Response({"Success": f"Поздравляем вы учавствуете в среднем конкурсе! {user.qr_quantity}"})
-            elif user.qr_quantity >= 100:
-                user.which_contest = "MORE_100"
-                user.save()
-                return Response({"Success": f"Поздравляем вы учавствуете в самом большом конкурсе! {user.qr_quantity}"})
+            if user.qr_in_day >= 3:
+                return Response({'Error': 'В день можно отсканировать не более 3 QR кодов'})
             else:
-                user.which_contest = "LESS_5"
+
+                token.user = user
+                token.isActive = False
+                token.save()
+                user.qr_quantity += 1
+                user.qr_in_day += 1
                 user.save()
-                return Response({"Success": f"Отсканируйте больше 5 Qr кодов, что бы начать учавствовать в конкурсе! {user.qr_quantity}"})
-            
-    # serializer = TokenSerializer(instance=token)
-    # return Response(serializer.data)
+                contests = []
+                for i in Contest.objects.all():
+                    contests.append(i.need_qr)
+                contests.sort()
+                
+                if user.qr_quantity < contests[0]:
+                    return Response({"Success": f"Отсканируйте больше {contests[0]} Qr кодов, что бы начать учавствовать в конкурсе! {user.qr_quantity}"})
+                elif user.qr_quantity >= contests[-1]:
+                    return Response({"Success": f"Поздравляем вы учавствуете в самом большом конкурсе! {user.qr_quantity}"})
+                else:
+                    for i in range(len(contests)):
+                        if user.qr_quantity >= contests[i-1] and user.qr_quantity < contests[i]:
+                            return Response({"Success": f"Поздравляем вы учавствуете в конкурсе номер {contests[i-1]}! {user.qr_quantity}"})
+
+

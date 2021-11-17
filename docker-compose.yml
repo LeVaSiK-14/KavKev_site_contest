@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    command: >
+      sh -c "python3 manage.py migrate &&
+            python3 manage.py runserver 0.0.0.0:8000"
+
+  redis:
+      image: redis
+
+  celery:
+    build:
+      context: .
+    container_name: celery-worker
+    restart: always
+    command: sh -c "celery -A kavKev_Site worker -l INFO --pool=solo"
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+      - app
+
+  celery-beat:
+    build:
+      context: .
+    image: celery 
+    container_name: celery-beat
+    restart: always
+    command: celery -A kavKev_Site beat -l INFO
+    volumes:
+      - .:/code
+    depends_on:
+      - redis 
+      - celery
+      - app
+
