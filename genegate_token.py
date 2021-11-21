@@ -1,12 +1,11 @@
-import random
 import pyqrcode
 import time
 import requests
 import os
+import shortuuid
 
 sT = time.time()
 
-chars = 'abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 router = 'http://kavkev.kg/'
 
 dir = os.path.join("QRCODES")
@@ -15,12 +14,9 @@ if not os.path.exists(dir):
 
 for n in range(0, 100):
 
-    token =''
+    token = shortuuid.ShortUUID().random(length=25)
 
-    for i in range(0, 25):
-        token += random.choice(chars)
-
-    url = router+token
+    url = router + token
     urls = pyqrcode.create(url)
     urls.png(f'./QRCODES/myqr{n+1}.png', scale = 6)
     data = {

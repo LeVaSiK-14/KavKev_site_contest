@@ -8,10 +8,7 @@ class TokenSerializer(ModelSerializer):
         model = Token
         fields = ['id', 'token', 'slug', 'isActive', 'user']
         read_only_fields = ['isActive', ]
-        # lookup_field = 'slug'
-        # extra_kwargs = {
-        #     'url': {'lookup_field': 'slug'}
-        # }
+
 
 class ContestSerializer(ModelSerializer):
     class Meta:

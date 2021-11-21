@@ -8,7 +8,7 @@ from django_filters import rest_framework as django_filter
 from rest_framework.response import Response
 
 from mainapp.models import Token
-from mainapp.serializers import TokenSerializer, ContestSerializer
+from mainapp.serializers import TokenSerializer
 from accounts.models import Contest
 
 
@@ -43,18 +43,14 @@ class RetrieveUpdateToken(RetrieveUpdateAPIView):
                 user.qr_quantity += 1
                 user.qr_in_day += 1
                 user.save()
-                contests = []
-                for i in Contest.objects.all():
-                    contests.append(i.need_qr)
-                contests.sort()
+
+                contests = Contest.objects.all().order_by('need_qr')
                 
-                if user.qr_quantity < contests[0]:
+                if user.qr_quantity < contests.first().need_qr:
                     return Response({"Success": f"Отсканируйте больше {contests[0]} Qr кодов, что бы начать учавствовать в конкурсе! {user.qr_quantity}"})
-                elif user.qr_quantity >= contests[-1]:
+                elif user.qr_quantity >= contests.last().need_qr:
                     return Response({"Success": f"Поздравляем вы учавствуете в самом большом конкурсе! {user.qr_quantity}"})
                 else:
-                    for i in range(len(contests)):
-                        if user.qr_quantity >= contests[i-1] and user.qr_quantity < contests[i]:
-                            return Response({"Success": f"Поздравляем вы учавствуете в конкурсе номер {contests[i-1]}! {user.qr_quantity}"})
-
-
+                    for i in range(1, len(contests)):
+                        if user.qr_quantity >= contests[i-1].need_qr and user.qr_quantity < contests[i].need_qr:
+                            return Response({"Success": f"Поздравляем вы учавствуете в конкурсе номер {contests[i-1].need_qr}! {user.qr_quantity}"})
