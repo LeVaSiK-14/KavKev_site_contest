@@ -2,6 +2,18 @@ version: "3"
 
 services:
 
+  db:
+    container_name: kavkev_db
+    image: postgres:10
+    environment:
+      POSTGRES_DB: "kavkevdb"
+      POSTGRES_USER: "kavkevadmin"
+      POSTGRES_PASSWORD: "kavkevpassword"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+
   app:
     build:
       context: .
@@ -12,6 +24,10 @@ services:
     command: >
       sh -c "python3 manage.py migrate &&
             python3 manage.py runserver 0.0.0.0:8000"
+    restart: always
+    depends_on:
+      - db
+
 
   redis:
       image: redis
@@ -21,12 +37,13 @@ services:
       context: .
     container_name: celery-worker
     restart: always
-    command: sh -c "celery -A kavKev_Site worker -l INFO --pool=solo"
+    command: sh -c "celery -A kavKev_Site worker -l INFO"
     volumes:
       - .:/code
     depends_on:
       - redis
       - app
+      - db
 
   celery-beat:
     build:
@@ -41,4 +58,6 @@ services:
       - redis 
       - celery
       - app
-
+      - db
+volumes:
+  pgdata:

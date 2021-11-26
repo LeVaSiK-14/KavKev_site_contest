@@ -11,7 +11,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
 
-DEBUG = env('DEBUG')
+DEBUG = False
 
 # Разрешенные хосты
 ALLOWED_HOSTS = ['*']
@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     # Мои приложения
     'mainapp',
     'accounts',
+    'products',
+    'order',
 ]
 
 
@@ -77,21 +79,14 @@ WSGI_APPLICATION = 'kavKev_Site.wsgi.application'
 
 
 # Подключение базы данных Postgresql
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': env('NAME_DB'),
-#         'USER': env('USER_NAME'),
-#         'PASSWORD': env('USER_PASSWORD'),
-#         'HOST': env('HOST'),
-#         'PORT': env('PORT'),
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env('SQL_DATABASE'),
+        'USER': env('SQL_USER'),
+        'PASSWORD': env('SQL_PASSWORD'),
+        'HOST': env('SQL_HOST'),
+        'PORT': env('SQL_PORT'),
     }
 }
 
@@ -113,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Настройка Time zone и языка проекта
 LANGUAGE_CODE = 'ru'
-TIME_ZONE = 'Asia/Almaty'
+TIME_ZONE = 'Asia/Bishkek'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -128,8 +123,6 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
     'http://127.0.0.1:5500',
-    
-
 ]
 
 # Настройка Celery
