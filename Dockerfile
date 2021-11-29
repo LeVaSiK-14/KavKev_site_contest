@@ -1,7 +1,15 @@
 FROM python:3
-MAINTAINER  Boiko Lev <lev201611@gmail.com>
+
 ENV PYTHONUNBUFFERED=1
-WORKDIR /code
-COPY req.txt /code/
+
+WORKDIR /usr/src/app
+
+COPY req.txt .
+COPY entrypoint.sh .
+
 RUN pip install -r req.txt
-COPY ./kavKev_Site /code/
+RUN chmod +x entrypoint.sh
+
+COPY ../kavKev_Site/ .
+
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]

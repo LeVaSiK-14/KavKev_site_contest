@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_celery_beat',
     'django_celery_results',
+    'psycopg2',
     # Мои приложения
     'mainapp',
     'accounts',
@@ -85,7 +86,7 @@ DATABASES = {
         'NAME': env('SQL_DATABASE'),
         'USER': env('SQL_USER'),
         'PASSWORD': env('SQL_PASSWORD'),
-        'HOST': env('SQL_HOST'),
+        'HOST': 'postgresdb',
         'PORT': env('SQL_PORT'),
     }
 }
@@ -150,3 +151,9 @@ REST_FRAMEWORK = {
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# command: >
+    #   sh -c "python3 manage.py migrate &&
+    #         python3 manage.py runserver 0.0.0.0:8000"
+    # restart: always
