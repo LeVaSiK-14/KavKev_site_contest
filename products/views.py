@@ -246,19 +246,25 @@ class RegistrationAPIView(APIView):
         serializer = RegistrationSerializer(data = request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        username = data.get('username')
+        number = data.get('number')
         password = data.get('password')
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
 
-        if User.objects.filter(username=username).exists():
-            return Response({'Message': 'User with such username is already exists'})
+        if User.objects.filter(number=number).exists():
+            return Response({'Message': 'User with such number is already exists'})
 
-        user = User.objects.create_user(username=username, password=password)
+        user = User.objects.create_user(
+                                        number=number, 
+                                        password=password, 
+                                        first_name=first_name, 
+                                        last_name=last_name)
 
         token = Token.objects.create(user=user)
 
         return Response({'token': token.key})
 
 # {
-# "username": "levasik",
+# "number": "996559595139",
 # "password": "qwerty12345"
 # }

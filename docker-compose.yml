@@ -21,8 +21,8 @@ services:
       context: ./
     ports:
       - "8000:8000"
-    # volumes:
-    #   - ./:/usr/src/app/
+    volumes:
+      - ./:/usr/src/app
     depends_on:
       - postgresdb
 
@@ -36,8 +36,8 @@ services:
     container_name: celery-worker
     restart: always
     command: sh -c "celery -A ./kavKev_Site worker -l INFO"
-    # volumes:
-    #   - .:/usr/src/app
+    volumes:
+      - ./:/usr/src/app
     depends_on:
       - redis
       - app
@@ -50,8 +50,8 @@ services:
     container_name: celery-beat
     restart: always
     command: celery -A ./kavKev_Site beat -l INFO
-    # volumes:
-    #   - .:/usr/src/app
+    volumes:
+      - ./:/usr/src/app
     depends_on:
       - redis 
       - celery

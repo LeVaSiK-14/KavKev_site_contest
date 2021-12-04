@@ -3,7 +3,7 @@ from mainapp.models import Token
 from accounts.models import Contest
 
 class TokenSerializer(ModelSerializer):
-    user = ReadOnlyField(source='user.username')
+    user = ReadOnlyField(source='user.first_name')
     class Meta:
         model = Token
         fields = ['id', 'token', 'slug', 'isActive', 'user']

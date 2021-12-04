@@ -43,7 +43,7 @@ class CartProductSerializer(ModelSerializer):
 class CartSerializer(ModelSerializer):
 
     all_products = CartProductSerializer(source='cartproduct_set', many=True, read_only=True)
-    author = serializers.ReadOnlyField(source='customer.username')
+    author = serializers.ReadOnlyField(source='customer.first_name')
 
     class Meta:
         model = Cart
@@ -68,8 +68,10 @@ class OrderSerializer(ModelSerializer):
 
 
 class RegistrationSerializer(Serializer):
-    username = serializers.CharField()
+    number = serializers.CharField()
     password = serializers.CharField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
 
     def validated_password(self, value):
         if len(value) < 5:
