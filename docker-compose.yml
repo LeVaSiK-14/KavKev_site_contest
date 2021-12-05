@@ -26,6 +26,17 @@ services:
     depends_on:
       - postgresdb
 
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: ./Dockerfile
+    depends_on:
+      - app
+      - postgresdb
+    ports:
+      - "80:80"
+    volumes:
+      - ./static/:/static
 
   redis:
       image: redis
@@ -57,6 +68,8 @@ services:
       - celery
       - app
       - postgresdb
+
+  
 
 # volumes:
 #   pgdata:
