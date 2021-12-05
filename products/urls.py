@@ -2,11 +2,11 @@ from rest_framework.routers import SimpleRouter
 from django.urls import path
 
 from products.views import (
-                            CategoryViewSet, 
-                            ProductsViewSet,
-                            CartViewSet,
-                            RegistrationAPIView,
-                            AuthenticationAPIView)
+    CategoryViewSet,
+    ProductsViewSet,
+    CartViewSet,
+    RegistrationAPIView,
+    AuthenticationAPIView)
 
 router = SimpleRouter()
 

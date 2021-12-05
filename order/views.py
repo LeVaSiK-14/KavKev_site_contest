@@ -19,15 +19,3 @@ class OrderViewSet(ModelViewSet):
             order.save()
 
             return Response({'Status': 'Успешно доставлен'})
-
-
-    @action(methods=['get', 'post', ], detail=True, )
-    def order_status_cancel(self, request, *args, **kwargs):
-        order = self.get_object()
-        user = request.user
-        if order.cart.customer == user:
-            order.status = 'Отменён'
-            order.save()
-
-
-            return Response({'Status': 'Отменён'})
