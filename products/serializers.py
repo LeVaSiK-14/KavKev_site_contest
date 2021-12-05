@@ -79,3 +79,8 @@ class RegistrationSerializer(Serializer):
         elif len(value) > 20:
             raise exceptions.ValidationError('Password is too long')
         return value
+
+class AuthenticationSerializer(Serializer):
+    number = serializers.CharField()
+    password = serializers.CharField()
+    

@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     # Подключенные библиотеки-приложения
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth',
     'drf_yasg',
     'django_filters',
     'corsheaders',

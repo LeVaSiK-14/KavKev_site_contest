@@ -5,6 +5,7 @@ from products.models import (
                             CartProduct, 
                             Cart,
                             Order)
+
 from products.serializers import (
                             CategorySerializer, 
                             ProductSerializer, 
@@ -12,19 +13,17 @@ from products.serializers import (
                             AmountSerializer,
                             CartSerializer,
                             OrderSerializer,
-                            RegistrationSerializer)
+                            RegistrationSerializer,
+                            AuthenticationSerializer)
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.generics import (
-                                    RetrieveAPIView)
 from rest_framework.views import APIView
 from rest_framework.status import (
                                     HTTP_200_OK,
-                                    HTTP_400_BAD_REQUEST,
-                                    HTTP_201_CREATED,)
+                                    HTTP_400_BAD_REQUEST,)
 from rest_framework.permissions import (
                                     IsAdminUser, 
                                     IsAuthenticated, 
@@ -34,6 +33,7 @@ from django_filters import rest_framework as django_filter
 from rest_framework.authtoken.models import Token
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate
 
 User = get_user_model()
 
@@ -263,6 +263,21 @@ class RegistrationAPIView(APIView):
         token = Token.objects.create(user=user)
 
         return Response({'token': token.key})
+
+class AuthenticationAPIView(APIView):
+
+    def post(self, request):
+        serializer = AuthenticationSerializer(data = request.data)
+        data = serializer.validated_data
+        number = data.get('number')
+        password = data.get('password')
+        user = authenticate(number = number, password = password)
+        if user is not None:
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({"token": token.key}, status=HTTP_200_OK)
+        return Response({'message':'invalid credentials'},status = HTTP_400_BAD_REQUEST)
+            
+
 
 # {
 # "number": "996559595139",
