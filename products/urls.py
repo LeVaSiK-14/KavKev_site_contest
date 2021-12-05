@@ -5,8 +5,8 @@ from products.views import (
                             CategoryViewSet, 
                             ProductsViewSet,
                             CartViewSet,
-                            
-                            RegistrationAPIView)
+                            RegistrationAPIView,
+                            AuthenticationAPIView)
 
 router = SimpleRouter()
 
@@ -17,6 +17,7 @@ router.register('my_cart', CartViewSet)
 
 urlpatterns = [
     path('registration/', RegistrationAPIView.as_view()),
+    path('login/', AuthenticationAPIView.as_view()),
 ]
 
 urlpatterns += router.urls

@@ -132,7 +132,7 @@ CELERY_BROKER_URL = 'redis://redis:6379'
 CELERY_BROKER_TRANSPORT = 'redis'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_TIMEZONE = "Asia/Almaty"
+CELERY_TIMEZONE = "Asia/Bishkek"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_RESULT_BACKEND = 'django-db'
@@ -154,7 +154,16 @@ REST_FRAMEWORK = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# command: >
-    #   sh -c "python3 manage.py migrate &&
-    #         python3 manage.py runserver 0.0.0.0:8000"
-    # restart: always
+SWAGGER_SETTINGS = {
+    'PERSIT_AUTH': True,
+    'SECURITY_DEFINITIONS':{
+        'Basic':{
+            'type': 'basic'
+        },
+        'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
