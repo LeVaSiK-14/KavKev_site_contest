@@ -1,11 +1,15 @@
 FROM python:3
 
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 WORKDIR /usr/src/app
 
 COPY req.txt .
 COPY entrypoint.sh .
+
+RUN apk  --update add
+RUN apk add gcc libc-dev libffi-dev jpeg-dev zlib-dev libjpeg
 
 RUN python -m pip install --upgrade pip
 RUN pip install -r req.txt
