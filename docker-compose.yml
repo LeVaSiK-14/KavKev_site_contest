@@ -1,5 +1,6 @@
 version: "3"
 
+
 services:
 
   postgresdb:
@@ -9,13 +10,11 @@ services:
     environment:
       - POSTGRES_PASSWORD=kavkevpassword
     volumes:
-      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    
 
-
-  app:
+  web:
     container_name: kavkev_app
     build:
       context: ./
@@ -29,14 +28,17 @@ services:
   nginx:
     build:
       context: ./docker/nginx
-      dockerfile: ./Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "80:80"
     volumes:
       - ./static/:/static
     depends_on:
-      - app
       - postgresdb
+      - web
+
+
+
 
   redis:
       image: redis
@@ -51,7 +53,7 @@ services:
       - ./:/usr/src/app
     depends_on:
       - redis
-      - app
+      - web
       - postgresdb
 
   celery-beat:
@@ -66,10 +68,8 @@ services:
     depends_on:
       - redis 
       - celery
-      - app
+      - web
       - postgresdb
 
-  
-
-# volumes:
-#   pgdata:
+volumes:
+  pgdata:
