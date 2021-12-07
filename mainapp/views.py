@@ -51,7 +51,7 @@ class RetrieveUpdateToken(RetrieveUpdateAPIView):
                                     "Success": 
                                     f"Отсканируйте больше {contests.first().need_qr} Qr кодов, что бы начать учавствовать в конкурсе! {contests.first().name_contest}"})
                 elif user.qr_quantity >= contests.last().need_qr:
-                    return Response({"Success": f"Поздравляем вы учавствуете в самом большом конкурсе! {user.qr_quantity}"})
+                    return Response({"Success": f"Поздравляем вы учавствуете в самом большом конкурсе на !{contests.last().name_contest}"})
                 else:
                     for i in range(1, len(contests)):
                         if user.qr_quantity >= contests[i-1].need_qr and user.qr_quantity < contests[i].need_qr:
