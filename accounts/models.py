@@ -8,6 +8,7 @@ from django.contrib.auth.models import (
 class Contest(models.Model):
     need_qr = models.PositiveIntegerField(default=0)
     name_contest = models.CharField(max_length=127)
+    image = models.URLField(max_length=1028)
     
     def __str__(self):
         return f'{self.name_contest} - {self.need_qr}'
