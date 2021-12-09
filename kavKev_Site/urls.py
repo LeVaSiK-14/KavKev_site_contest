@@ -8,11 +8,11 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="CARREG API",
+        title="KAVKEV API",
         default_version='v1',
-        description="Test description",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@snippets.local"),
+        description="Kav&Kev api for contest and online shop",
+        terms_of_service="",
+        contact=openapi.Contact(email="lev201611@gmail.com"),
         license=openapi.License(name="BSD License"),
     ),
     public=True,
@@ -24,5 +24,6 @@ urlpatterns = [
     path('api/', include('mainapp.urls')),
     path('api/', include('products.urls')),
     path('api/', include('order.urls')),
+    path('api/', include('rest_auth.urls')),
     path('api/swagger/', schema_view.with_ui(), name='schema-json'),
 ]

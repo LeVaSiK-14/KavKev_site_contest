@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Подключенные библиотеки-приложения
+    'rest_auth',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
@@ -56,6 +57,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 ROOT_URLCONF = 'kavKev_Site.urls'
 
 # Настройка Templates
@@ -79,14 +84,21 @@ WSGI_APPLICATION = 'kavKev_Site.wsgi.application'
 
 
 # Подключение базы данных Postgresql
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': env('SQL_DATABASE'),
+#         'USER': env('SQL_USER'),
+#         'PASSWORD': env('SQL_PASSWORD'),
+#         'HOST': 'postgresdb',
+#         'PORT': env('SQL_PORT'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env('SQL_DATABASE'),
-        'USER': env('SQL_USER'),
-        'PASSWORD': env('SQL_PASSWORD'),
-        'HOST': 'postgresdb',
-        'PORT': env('SQL_PORT'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -125,6 +137,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
     'http://127.0.0.1:5500',
+    'http://kavkev.kg',
 ]
 
 # Настройка Celery

@@ -68,7 +68,7 @@ class OrderSerializer(ModelSerializer):
 
 
 class RegistrationSerializer(Serializer):
-    number = serializers.CharField()
+    username = serializers.CharField()
     password = serializers.CharField()
     first_name = serializers.CharField()
     last_name = serializers.CharField()
@@ -81,6 +81,6 @@ class RegistrationSerializer(Serializer):
         return value
 
 class AuthenticationSerializer(Serializer):
-    number = serializers.CharField()
+    username = serializers.CharField()
     password = serializers.CharField()
     

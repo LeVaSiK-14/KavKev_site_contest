@@ -39,9 +39,6 @@ services:
       - postgresdb
       - web
 
-
-
-
   redis:
     container_name: kavkev_redis
     image: redis

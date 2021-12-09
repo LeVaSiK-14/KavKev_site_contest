@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from accounts.models import User
 from django.contrib.auth.hashers import check_password
 from django_filters import rest_framework as django_filter
 from rest_framework.authtoken.models import Token
@@ -18,7 +18,6 @@ from products.serializers import (AmountSerializer, AuthenticationSerializer,
                                   OrderSerializer, ProductSerializer,
                                   RaitingSerializer, RegistrationSerializer)
 
-User = get_user_model()
 
 
 class CategoryViewSet(ModelViewSet):
@@ -236,16 +235,16 @@ class RegistrationAPIView(APIView):
         serializer = RegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        number = data.get('number')
+        username = data.get('username')
         password = data.get('password')
         first_name = data.get('first_name')
         last_name = data.get('last_name')
 
-        if User.objects.filter(number=number).exists():
-            return Response({'Message': 'User with such number is already exists'})
+        if User.objects.filter(username=username).exists():
+            return Response({'Message': 'User with such username is already exists'})
 
         user = User.objects.create_user(
-            number=number,
+            username=username,
             password=password,
             first_name=first_name,
             last_name=last_name)
@@ -261,9 +260,9 @@ class AuthenticationAPIView(APIView):
         serializer = AuthenticationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        number = serializer.validated_data.get('number')
+        username = serializer.validated_data.get('username')
         password = serializer.validated_data.get('password')
-        user = User.objects.filter(number=number).first()
+        user = User.objects.filter(username=username).first()
         
 
         if user is not None:
@@ -273,10 +272,10 @@ class AuthenticationAPIView(APIView):
             else:
                 return Response({'Error': 'Invalid password'}, status=HTTP_400_BAD_REQUEST)
 
-        return Response({'Error': 'This number is not registered'}, status=HTTP_400_BAD_REQUEST)
+        return Response({'Error': 'This username is not registered'}, status=HTTP_400_BAD_REQUEST)
 
 
 # {
-# "number": "996559595139",
+# "username": "996559595139",
 # "password": "qwerty12345"
 # }

@@ -1,7 +1,3 @@
-from django.db.models.base import Model
-from rest_framework import serializers
-from rest_framework.decorators import action
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework.filters import SearchFilter
 from django_filters import rest_framework as django_filter
