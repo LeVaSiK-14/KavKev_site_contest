@@ -23,7 +23,7 @@ for n in range(0, 100):
             "token": token,
             "slug": token
             }
-    siteURL = 'http://localhost/api/token/'
+    siteURL = 'http://api-kavkev.kg/api/token/'
     response = requests.post(siteURL, data)
 
 

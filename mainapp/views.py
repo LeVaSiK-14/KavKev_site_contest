@@ -2,7 +2,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework.filters import SearchFilter
 from django_filters import rest_framework as django_filter
 from rest_framework.response import Response
-
+from rest_framework.permissions import IsAdminUser
 from mainapp.models import Token
 from mainapp.serializers import TokenSerializer
 from accounts.models import Contest
@@ -11,6 +11,7 @@ from accounts.models import Contest
 class ListCreateToken(ListCreateAPIView):
     queryset = Token.objects.all()
     serializer_class = TokenSerializer
+    permission_classes = [IsAdminUser, ]
     filter_backends = [django_filter.DjangoFilterBackend, SearchFilter]
     filter_fields = ['token', ]
     search_fields = ['token', ]
